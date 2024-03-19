@@ -5,7 +5,11 @@ This is a project related to the paper "Determining Research Priorities Using Ma
 
 
 ## Install
-
+Build the conda environment:
+```bash
+> conda env create -f env-strat-paper.yml
+> conda activate strat-paper
+```
 
 ## Use
 
