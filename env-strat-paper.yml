@@ -1,0 +1,17 @@
+name: strat-paper
+channels:
+- conda-forge
+dependencies:
+- python=3.10.* 
+- pip
+- numpy
+- ipykernel
+- pandas
+- matplotlib
+- scipy
+#- plotly
+#- click
+- h5py
+- pip:
+  #- image
+  - bootstrap-stat
