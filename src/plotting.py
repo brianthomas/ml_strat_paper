@@ -7,11 +7,26 @@ import sys
 sys.path.append("../src")
 from fitting_util import *
 
-def plot_data_errs (x, y, y_err, xlabel="", ylabel="", title="Title", ax=None, color='red'):
+DEF_MAX_TIME = 104 # weeks for 2 years
+MIN_TIME = -1  # weeks
+
+def plot_data (xdata, ydata, xlabel="", ylabel="", title="Decadal Analysis", ax=None, color='red'):
+
     if ax == None:
         fig, ax = plt.subplots()
 
     #plt.style.use('fivethirtyeight')
+
+    ax.plot(xdata, ydata, marker='o', markerfacecolor=color, linestyle=' ')
+
+    ax.set_title(title)
+    ax.set(xlabel=xlabel, ylabel=ylabel)
+
+    return ax
+
+def plot_data_errs (x, y, y_err, xlabel="", ylabel="", title="Title", ax=None, color='red'):
+    if ax == None:
+        fig, ax = plt.subplots()
 
     ax.plot(x, y, marker='o', markerfacecolor=color, linestyle=' ')
     plt.errorbar(x, y, fmt='ko', yerr=y_err)
@@ -20,6 +35,45 @@ def plot_data_errs (x, y, y_err, xlabel="", ylabel="", title="Title", ax=None, c
     ax.set(xlabel=xlabel, ylabel=ylabel)
 
     return ax
+
+def plotdata_with_errors (plt, x, y, y_err, maxx=DEF_MAX_TIME, minx=MIN_TIME):
+
+    #plot data and errors
+    plt.plot(x, y, "ko", label='Topic')
+    plt.errorbar(x, y, fmt='ko', yerr=y_err)
+
+def plotdata_with_errors_and_func (plt, x, y, y_err, p, perr, fitfunc, maxx=DEF_MAX_TIME, minx=MIN_TIME):
+
+    plotdata_with_errors(plt, x, y, y_err, maxx, minx)
+    plt.plot(x, fitfunc(p, x), 'r-', label='Fitted Fnct')
+
+
+def plotdata_and_residuals(plt, center, x, y, y_err, pfit, perr, redchisq, fitfunc, ylabel:str="", xlabel:str="", maxx:int=DEF_MAX_TIME, minx:int=MIN_TIME):
+
+    fitfunc_cnst = lambda p, x: np.array([p[0] for dx in x])
+
+    fig = plt.figure(1)
+    frame1=fig.add_axes((.1,.3,.8,.6))
+    plotdata_with_errors_and_func(plt, x, y, y_err, pfit, perr, fitfunc, maxx, minx)
+    plt.title(f" {center}")
+    plt.ylabel(ylabel)
+    #plt.grid()
+
+    # fit and plot residuals w/ a constant
+    difference = fitfunc(pfit, x) - y
+
+    # try to fit with constant line
+    pfit_cnst, perr_cnst, redchisq_cnst = fit_leastsq([0], x, difference, fitfunc_cnst, y_err)
+
+    frame2=fig.add_axes((.1,.1,.8,.2))
+    #plotdata_with_errors_and_func(plt, x, difference, y_err, pfit_cnst, perr_cnst, fitfunc_cnst)
+    plotdata_with_errors(plt, x, difference, y_err)
+    plt.ylabel("Residuals")
+
+    plt.plot(x, fitfunc_cnst(pfit_cnst, x), 'r-', label='Fitted Const')
+    #plt.title(f" Fitted value {pfit_cnst[0]} +/- {perr_cnst[0]}\n redchi:{redchisq_cnst}")
+    #plt.ylim(-125.,125.)
+    plt.xlabel(xlabel)
 
 def plot_report(df:pd.DataFrame, title:str="", which_cagr:str="CAGR", offset:str="FILLINOFFSET", spearman:bool=False, 
         cagr_err:float=0.009, ri_err:float=20., tcs_lit_err:float=5.5):
