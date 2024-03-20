@@ -9,6 +9,7 @@ dependencies:
 - pandas
 - matplotlib
 - scipy
+- scikit-learn
 #- plotly
 #- click
 - h5py
