@@ -39,7 +39,7 @@ Descriptions of notebooks:
 
 | Name | Description |
 | :--- | :---------- | 
-| Process\_Data.ipynb | Do (most of) the basic processing of LDA model output data into form used by other notebooks. Some light analysis of processing is also included. **Run this notebook first** to generate the files needed by other notebooks. There are various switches within the notebook to test various data generation/filtering choices. |  
+| [Process\_Data](notebooks/Process_Data.ipynb) | Do (most of) the basic processing of LDA model output data into form used by other notebooks. Some light analysis of processing is also included. **Run this notebook first** to generate the files needed by other notebooks. There are various switches within the notebook to test various data generation/filtering choices. |  
 | Bootstrap\_Estimation\_1998-2010\_RI.ipynb      | Estimate errors using bootstrap for Research Interest (RI) metric. |  
 | Bootstrap\_Estimation\_1998-2010\_TCS.ipynb     | Estimate errors using bootstrap for Topic Contribution Score (TCS) metric. |  
 | Bootstrap\_Estimation\_1998-2010\_TCS\_CAGR.ipynb| Estimate errors using bootstrap for TCS Compount Annual Growth Rate (TCS\_CAGR) metric. | 
