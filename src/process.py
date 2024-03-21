@@ -1,14 +1,18 @@
+''' Module of processing utilty functions '''
+
+import os
+import json
 import gzip
 import h5py
-import json
-import os
 import pandas as pd
 
 def open_datafiles(version:str, lpt:float=-2.5, contentType:str="decadal_report")->list:
+    ''' omnibus open of all needed datafiles '''
 
     return openlda_viz(version), open_timeseries(version), open_topic_distrib(version, contentType), open_stable_topics(version, lpt)
 
 def openlda_viz(version:str)->pd.DataFrame:
+    ''' open lda viz datafile for specific version '''
 
     lda_viz_filename = f"../data/pyLDAvis_data_{version}.json.gz"
 
@@ -23,6 +27,7 @@ def openlda_viz(version:str)->pd.DataFrame:
     return pd.DataFrame(json.loads(pyldavis_data)['tinfo'])
 
 def open_timeseries(version:str)->pd.DataFrame:
+    ''' open timeseries datafile for specific version '''
 
     timeseries_filename = f"../data/time_series_characteristics_{version}.csv.gz"
 
@@ -31,6 +36,7 @@ def open_timeseries(version:str)->pd.DataFrame:
 
 
 def open_topic_distrib(version:str, contentType:str="decadal_report")->pd.DataFrame:
+    ''' open topic distribution datafile for specific version '''
 
     # data file to use
     if contentType == 'decadal_report':
@@ -38,13 +44,14 @@ def open_topic_distrib(version:str, contentType:str="decadal_report")->pd.DataFr
     elif contentType == 'whitepapers':
         topic_distrib_filename = f"../data/topic_distributions_2010_whitepapers_{version}.csv.gz"
     else:
-        raise Exception (f"Unknown contentType: {contentType}")
+        raise ValueError (f"Unknown contentType: {contentType}")
 
     # Read in document inference information
     return pd.read_csv(topic_distrib_filename, compression='gzip', index_col=False)
 
 
 def open_stable_topics(version:str, lpt:float=-2.5)->pd.DataFrame:
+    ''' open stable topics datafile for specific version '''
     return pd.read_csv(f'../data/stable_topics_{version}_lp{lpt}.csv')
 
 def doc_tcs_by_topic (doc_data, threshold:float=0.01, id_col:str="Unnamed: 0"):
@@ -69,6 +76,7 @@ def doc_tcs_by_topic (doc_data, threshold:float=0.01, id_col:str="Unnamed: 0"):
     return tcs
 
 def topic_name(topic:int, lda_viz_data:pd.DataFrame)->str:
+    ''' find the human-readable topic name for given topic in lda viz file '''
 
     topic_keys = lda_viz_data[lda_viz_data['Category']== f'Topic{topic}']
     sorted_keys = topic_keys.sort_values(by="logprob", ascending=False)
@@ -79,7 +87,7 @@ def topic_name(topic:int, lda_viz_data:pd.DataFrame)->str:
 
     return name[:-2]
 
-def create_dataset(document_scores, timeseries_data:pd.DataFrame, lda_viz_data:pd.DataFrame, which_cagr:str='CAGR', ignore_topics:list=[], flex_min_cagr:bool=False, min_cagr:float=0.0, max_doc_score:float=1.0)->pd.DataFrame:
+def create_dataset(document_scores, timeseries_data:pd.DataFrame, lda_viz_data:pd.DataFrame, which_cagr:str='CAGR', ignore_topics:list=None, flex_min_cagr:bool=False, min_cagr:float=0.0, max_doc_score:float=1.0)->pd.DataFrame:
     """ Assemble a dataset of document score vs cagr, counts and ri """
 
     topic_cagr = timeseries_data[which_cagr]
@@ -113,18 +121,19 @@ def create_dataset(document_scores, timeseries_data:pd.DataFrame, lda_viz_data:p
 
 # some code to load h5py file we need to use
 def load_topic_bibcode_h5py(viz_data_loc: os.PathLike)->pd.DataFrame:
+    ''' load topic bibcode data form hdf5 datafile '''
     #Load object parameters from an hdf database.
     #Args:
     #    viz_data_loc: path to opinionated hdf file
-    
+
     with h5py.File(viz_data_loc, "r") as f0:
         embedding = f0["embedding"][:]
-        topic_coherences = f0["topic_coherences"][:]
+        #topic_coherences = f0["topic_coherences"][:]
         paper_ids = f0["paper_ids"][:]
         bibcodes = f0["bibcodes"][:]
 
     df = pd.DataFrame(embedding)
     df.index = paper_ids
     df['year'] = [ int(bibcode[0:4]) for bibcode in bibcodes]
-        
+
     return df
