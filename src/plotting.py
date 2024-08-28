@@ -50,7 +50,7 @@ def plotdata_with_errors_and_func (ax, x, y, y_err, p, fitfunc):
     ax.plot(x, fitfunc(p, x), 'r-', label='Fitted Fnct')
 
 
-def plotdata_and_residuals(ax, center, x, y, y_err, pfit, redchisq, fitfunc, ylabel:str="", xlabel:str=""):
+def plotdata_and_residuals(ax, center, x, y, y_err, pfit, redchisq, fitfunc, ylabel:str="", xlabel:str="", ylim:list=None):
     ''' utility plot data with y errors and a fitting function with residuals from fit method '''
 
     fitfunc_cnst = lambda p, x: np.array([p[0] for dx in x])
@@ -60,6 +60,9 @@ def plotdata_and_residuals(ax, center, x, y, y_err, pfit, redchisq, fitfunc, yla
     plotdata_with_errors_and_func(ax, x, y, y_err, pfit, fitfunc )
     ax.title(f" {center}")
     ax.ylabel(ylabel)
+    if ylim != None:
+        ax.ylim(ylim)
+
     #ax.grid()
 
     # fit and plot residuals w/ a constant
