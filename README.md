@@ -17,20 +17,18 @@ You will need to create the virtual environment for running the software. Once t
 **Requirements**
 - Python 3.10
 
-Build the conda environment:
+Build the conda virtual environment and activate it:
 ```bash
 > conda env create -f env-strat-paper.yml
 > conda activate strat-paper
 ```
 
+Alternatively there is a requirements.txt file which may be used to build the virtual environment.
+
 ### Data 
 
-Data were produced using the [topic emergence package](https://github.com/abuonomo/topic-emergence-ADS).  Data are stored on Zenodo [DOI: TBD](https://zenodo.org/) and may be obtained using the provided utility as follows:
-
-```bash
-> python bin/download_data.py
-``` 
-
+Data were produced using the [topic emergence package](https://github.com/abuonomo/topic-emergence-ADS) and are available from Zenodo at the following URL: [https://zenodo.org/records/13621599](https://zenodo.org/records/13621599). Download and unpack all of the data into the data subdirectory. 
+ 
 ## Use
 
 Each of the notebooks illustrates part of the work from processing the outputs from the LDA modeling (data obtained above) to analysis and plotting of the results. 
