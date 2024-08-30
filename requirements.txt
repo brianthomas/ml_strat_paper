@@ -1,0 +1,13 @@
+# local package
+#-e .
+
+# external requirements
+jupyter
+ipykernel
+scipy
+scikit-learn
+image
+h5py
+pandas
+matplotlib
+bootstrap-stat
