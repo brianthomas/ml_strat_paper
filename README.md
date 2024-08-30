@@ -27,7 +27,7 @@ Alternatively there is a requirements.txt file which may be used to build the vi
 
 ### Data 
 
-Data were produced using the [topic emergence package](https://github.com/abuonomo/topic-emergence-ADS) and are available from Zenodo at the following URL: [https://zenodo.org/records/13621599](https://zenodo.org/records/13621599). Download and unpack all of the data into the data subdirectory. 
+Data were produced using the [topic emergence package](https://github.com/abuonomo/topic-emergence-ADS) and are available from Zenodo at the following URL: [https://zenodo.org/records/13621625](https://zenodo.org/records/13621625). Download and unpack all of the data into the data subdirectory. 
  
 ## Use
 
