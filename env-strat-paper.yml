@@ -10,8 +10,6 @@ dependencies:
 - matplotlib
 - scipy
 - scikit-learn
-#- plotly
-#- click
 - h5py
 - pip:
   #- image
